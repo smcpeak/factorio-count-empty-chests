@@ -40,6 +40,11 @@ local check_period_ticks = 600;
 local all_combinator_records = nil;
 
 
+-- Which element of `all_combinator_records` to process next in the
+-- round-robin algorithm.
+local next_rr_index = 1;
+
+
 -- ----------------------------- Functions -----------------------------
 -- Log 'str' if we are at verbosity 'v' or higher.
 local function diag(v, str)
@@ -234,11 +239,31 @@ local function initialize_combinators_if_needed()
 end;
 
 
--- Update all combinators.
-local function update_all_combinators()
-  diag(4, "-- updating all combinators --");
+-- Number of table entries.  How is this not built in to Lua?
+function table_size(t)
+  local ct = 0;
+  for _, _ in pairs(t) do
+    ct = ct + 1;
+  end;
+  return ct;
+end;
 
+
+-- Update combinators one at a time in a round-robin fashion.
+local function update_rr_combinators()
   initialize_combinators_if_needed();
+
+  local num_combinators = table_size(all_combinator_records);
+
+  -- Clamp and cycle the index.
+  if (next_rr_index > num_combinators) then
+    next_rr_index = 1;
+  end;
+
+  diag(4, "-- update RR combinator: " .. next_rr_index ..
+          " of " .. num_combinators .. " --");
+
+  local loop_index = 1;
 
   -- Iterate over the records, scanning from each, and also removing
   -- any that refer to invalid entities.  (The event handlers should
@@ -247,14 +272,22 @@ local function update_all_combinators()
   -- entity without notifying event listeners.)
   for unit_number, record in pairs(all_combinator_records) do
     if (record.combinator.valid) then
-      update_one_combinator(record);
+      if (loop_index == next_rr_index) then
+        update_one_combinator(record);
+      end;
 
     else
       diag(4, "removing invalid entity for unit " .. unit_number);
       all_combinator_records[unit_number] = nil;
 
     end;
+
+    loop_index = loop_index + 1;
   end;
+
+  -- Increment the RR index.  It will cycle back the start when clamped
+  -- at the start of the next call to this function.
+  next_rr_index = next_rr_index + 1;
 end;
 
 
@@ -271,12 +304,12 @@ local function read_configuration_settings()
   -- Clear any existing tick handler.
   script.on_nth_tick(nil);
 
-  diagnostic_verbosity =     settings.global["empty-combinator-diagnostic-verbosity"].value;
-  enemy_check_period_ticks = settings.global["empty-combinator-check-period-ticks"].value;
+  diagnostic_verbosity = settings.global["empty-combinator-diagnostic-verbosity"].value;
+  check_period_ticks   = settings.global["empty-combinator-check-period-ticks"].value;
 
   -- Re-establish the tick handler with the new period.
-  script.on_nth_tick(enemy_check_period_ticks, function(e)
-    update_all_combinators();
+  script.on_nth_tick(check_period_ticks, function(e)
+    update_rr_combinators();
   end);
 
   diag(4, "read_configuration_settings end");

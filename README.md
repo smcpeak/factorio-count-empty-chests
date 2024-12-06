@@ -9,17 +9,38 @@ The primary intended use case is to set up an alarm for when the storage
 is close to being full.  Although Factorio provides a built-in alert for
 when the storage is completely full, that is only triggered once every
 *slot* is full, meaning that by then, many chests have been filled with
-a random assortment of various items, which is a mess to clean up.  With
+a random assortment of items, which is then a mess to clean up.  With
 this mod, you can set up an alert to trigger before the bots start
 packing the chests to the gills with random trash.
 
-## State of work
-
-Work in progress.
-
 ## Performance considerations
 
-TODO
+This mod is intended to be used in factories that have large storage
+networks.
+
+Counting the number of empty chests must be done with a loop; the API
+does not provide anything better.  For a logistic network containing
+(say) 4000 chests (regardless of whether they are empty), it takes
+around 10 ms to loop over them, and the time scales linearly with the
+number of chests.  10 ms of time spent in a mod is roughly the point
+where frames start getting delayed because it only leaves 6 ms for
+everything else.
+
+Therefore, this does a few things to limit the performance impact:
+
+* The combinator update code only runs once every 600 ticks (10 seconds)
+  by default.
+
+* Each update only looks at one combinator, cycling through them over
+  time.  So if you have N combinators in the world, then each combinator
+  gets updated every 600*N ticks.
+
+* The loop code itself has been profiled and optimized.
+
+In terms of factory design, considering the above, it is better to use
+just one combinator per network and route the one signal to where it
+needs to go, rather than use multiple combinators if the information is
+needed in multiple places.
 
 ## Uninstallation
 
