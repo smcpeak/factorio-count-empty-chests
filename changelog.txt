@@ -1,0 +1,5 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024-12-06
+  Major Features:
+    - Combinator to report the number of empty chests.

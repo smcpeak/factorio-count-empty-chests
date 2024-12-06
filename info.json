@@ -1,0 +1,10 @@
+{
+    "name": "CountEmptyChests",
+    "version": "1.0.0",
+    "title": "Count Enemy Chests",
+    "author": "Scott McPeak",
+    "homepage": "https://github.com/smcpeak/factorio-count-enemy-chests",
+    "factorio_version": "2.0",
+    "dependencies": ["base >= 2.0"],
+    "description": "Combinator to report the number of empty chests in a logistic network."
+}
