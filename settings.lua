@@ -6,7 +6,7 @@ data:extend({
   -- Time between checks for empty chests.
   {
     type = "int-setting",
-    name = "empty-combinator-check-period-ticks",
+    name = "empty-chest-combinator-check-period-ticks",
     setting_type = "runtime-global",
     default_value = 600,
     minimum_value = 1,
@@ -17,7 +17,7 @@ data:extend({
   -- control.lua.
   {
     type = "int-setting",
-    name = "empty-combinator-diagnostic-verbosity",
+    name = "empty-chest-combinator-diagnostic-verbosity",
     setting_type = "runtime-global",
     default_value = 1,
     minimum_value = 0,

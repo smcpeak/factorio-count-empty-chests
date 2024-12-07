@@ -227,7 +227,7 @@ local function initialize_combinators_if_needed()
     for surface_id, surface in pairs(game.surfaces) do
       diag(4, "scanning surface: " .. surface_id);
       local combinators = surface.find_entities_filtered{
-        name = "empty-combinator-entity",
+        name = "empty-chest-combinator-entity",
       };
       for _, combinator in pairs(combinators) do
         diag(4, "combinator " .. combinator.unit_number ..
@@ -304,8 +304,8 @@ local function read_configuration_settings()
   -- Clear any existing tick handler.
   script.on_nth_tick(nil);
 
-  diagnostic_verbosity = settings.global["empty-combinator-diagnostic-verbosity"].value;
-  check_period_ticks   = settings.global["empty-combinator-check-period-ticks"].value;
+  diagnostic_verbosity = settings.global["empty-chest-combinator-diagnostic-verbosity"].value;
+  check_period_ticks   = settings.global["empty-chest-combinator-check-period-ticks"].value;
 
   -- Re-establish the tick handler with the new period.
   script.on_nth_tick(check_period_ticks, function(e)
@@ -346,7 +346,7 @@ end;
 local event_filter = {
   {
     filter = "name",
-    name = "empty-combinator-entity",
+    name = "empty-chest-combinator-entity",
   },
 };
 
