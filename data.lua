@@ -6,9 +6,10 @@
 local combinator_recipe = {
   type = "recipe",
   name = "empty-chest-combinator-recipe",
-  enabled = true,       -- TODO: Hide this behind research.
+  enabled = false,       -- Enabled by advanced-combinators; see below.
 
-  -- For now, same ingredients as a constant combinator.
+  -- Ingredients are that of a constant combinator, plus a red circuit,
+  -- which a storage chest also requires.
   ingredients = {
     {
       amount = 5,
@@ -18,6 +19,11 @@ local combinator_recipe = {
     {
       amount = 2,
       name = "electronic-circuit",
+      type = "item",
+    },
+    {
+      amount = 1,
+      name = "advanced-circuit",
       type = "item",
     },
   },
@@ -63,6 +69,21 @@ data:extend{
   combinator_item,
   combinator_entity,
 };
+
+
+-- Related technologies:
+--    construction-robotics: storage-chest
+--    logistic-robotics: storage-chest
+--    circuit-network: Basic combinators.
+--    advanced-combinators: Selector combinator.
+
+-- I put this in with advanced-combinators because that one is at the
+-- tech tier of red circuit, like storage-chest, whereas the
+-- circuit-network is at the green circuit tier.
+table.insert(data.raw.technology["advanced-combinators"].effects, {
+  type = "unlock-recipe",
+  recipe = "empty-chest-combinator-recipe",
+})
 
 
 -- EOF
