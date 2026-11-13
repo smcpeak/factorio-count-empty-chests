@@ -1,10 +1,10 @@
 {
     "name": "CountEmptyChests",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "title": "Count Empty Chests",
     "author": "Scott McPeak",
     "homepage": "https://github.com/smcpeak/factorio-count-empty-chests",
-    "factorio_version": "2.0",
-    "dependencies": ["base >= 2.0"],
+    "factorio_version": "2.1",
+    "dependencies": ["base >= 2.1"],
     "description": "Combinator to report the number of empty chests in a logistic network."
 }

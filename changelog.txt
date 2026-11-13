@@ -3,3 +3,9 @@ Version: 1.0.0
 Date: 2024-12-06
   Major Features:
     - Combinator to report the number of empty chests.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2026-11-13
+  Compatibility:
+    - Update for Factorio 2.1.
